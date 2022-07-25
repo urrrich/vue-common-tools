@@ -41,7 +41,7 @@ export function useModelToValues({
   const formModel = ref(data())
   const values = computed({
     get() {
-      const target = {}
+      let target = {}
       Object.entries(formModel.value).forEach(([key, value]) => {
         const rule = keyMaps[key]
         if (rule) {
@@ -51,6 +51,8 @@ export function useModelToValues({
         }
       })
 
+      target = toValues(target)
+
       if (deleteInvalid) {
         Object.entries(target).forEach(([key, value]) => {
           if (value === '' || value === null || value === undefined) {
@@ -59,7 +61,7 @@ export function useModelToValues({
         })
       }
 
-      return toValues(target)
+      return target
     },
     set(data) {
       Object.entries(formModel.value).forEach(([key, value]) => {

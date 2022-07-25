@@ -19,7 +19,7 @@
     deleteInvalid: true,
     toValues(model) {
       const { firstName, lastName, tag, ...rest } = model
-      const fullName = firstName + '-' + lastName
+      const fullName = firstName + (firstName && lastName ? '-' : '') + lastName
             
       return {
         fullName,
