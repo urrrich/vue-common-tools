@@ -1,5 +1,5 @@
 <script setup>
-  import { useModelToValues } from '../src'
+  import { useModelToValues, InputTag } from '../src'
 
   const { formModel, values, reset } = useModelToValues({
     data() {
@@ -8,6 +8,7 @@
         lastName: 'san',
         select: 1,
         daterange: '',
+        tag: ['标签1', '标签2'],
         page: 1,
         pageSize: 10
       }
@@ -17,10 +18,12 @@
     },
     deleteInvalid: true,
     toValues(model) {
-      const { firstName, lastName, ...rest } = model
+      const { firstName, lastName, tag, ...rest } = model
       const fullName = firstName + '-' + lastName
+            
       return {
         fullName,
+        tag: tag.join(','),
         ...rest
       }
     },
@@ -28,12 +31,14 @@
       const [firstName, lastName] = data.fullName.split('-')
       model.firstName = firstName
       model.lastName = lastName
+      model.tag = data.tag.split(',')
     }
   })
 
 
   const updateFormModel = () => {
     formModel.value.daterange = ['2021-01-01', '2022-01-01']
+    formModel.value.tag = ['11', '22']
   }
 
   const getValuesFromServer = () => {
@@ -42,12 +47,13 @@
       select: 2,
       startTime: '2022-08-01',
       endTime: '2022-08-31',
+      tag: '888,999'
     }
   }
 </script>
 
 <template>
-  <el-form :model="formModel" label-position="top">
+  <el-form :model="formModel" label-position="top" style="padding: 20px;">
     <el-form-item label="firstName">
       <el-input v-model="formModel.firstName"></el-input>
     </el-form-item>
@@ -67,6 +73,10 @@
       <el-date-picker v-model="formModel.daterange" type="daterange" value-format="YYYY-MM-DD"></el-date-picker>
     </el-form-item>
 
+    <el-form-item label="tags">
+      <InputTag v-model="formModel.tag"></InputTag>
+    </el-form-item>
+
     <el-form-item style="justify-content: flex-start;">
       <div style="width:100%">
         <el-button type="primary" @click="reset">重置model</el-button>
@@ -83,6 +93,7 @@
       </div>
     </el-form-item>
   </el-form>
+
 </template>
 
 <style scoped>
@@ -92,7 +103,8 @@
     line-height: 1.5;
     font-family: 'Courier New', Courier, monospace;
     width: 300px;
-    height: 200px;
-    padding: 20px;
+    height: 300px;
+    padding: 10px;
+    font-size: 12px;
   }
 </style>
