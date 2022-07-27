@@ -1,18 +1,20 @@
 <script setup>
-  import { useModelToValues, InputTag } from '../src'
+  import { ref } from 'vue'
+  import { useFormValues, InputTag } from '../src'
 
-  const { formModel, values, reset } = useModelToValues({
-    data() {
-      return {
-        firstName: 'zhang',
-        lastName: 'san',
-        select: 1,
-        daterange: '',
-        tag: ['标签1', '标签2'],
-        page: 1,
-        pageSize: 10
-      }
-    },
+  const $form = ref()
+
+  const formModel = ref({
+    firstName: 'zhang',
+    lastName: 'san',
+    select: 1,
+    daterange: '',
+    tag: ['标签1', '标签2'],
+    page: 1,
+    pageSize: 10
+  })
+
+  const { values } = useFormValues(formModel, {
     keyMaps: {
       daterange: '[startTime, endTime]'
     },
@@ -35,6 +37,9 @@
     }
   })
 
+  const reset = () => {
+    $form.value.resetFields()
+  }
 
   const updateFormModel = () => {
     formModel.value.daterange = ['2021-01-01', '2022-01-01']
@@ -53,27 +58,27 @@
 </script>
 
 <template>
-  <el-form :model="formModel" label-position="top" style="padding: 20px;">
-    <el-form-item label="firstName">
+  <el-form :model="formModel" label-position="top" ref="$form" style="padding: 20px;">
+    <el-form-item label="firstName" prop="firstName">
       <el-input v-model="formModel.firstName"></el-input>
     </el-form-item>
 
-    <el-form-item label="lastName">
+    <el-form-item label="lastName" prop="lastName">
       <el-input v-model="formModel.lastName"></el-input>
     </el-form-item>
 
-    <el-form-item label="下拉框">
+    <el-form-item label="下拉框" prop="select">
       <el-select v-model="formModel.select">
         <el-option :value="1" label="选项一"></el-option>
         <el-option :value="2" label="选项二"></el-option>
       </el-select>
     </el-form-item>
 
-    <el-form-item label="daterange">
+    <el-form-item label="daterange" prop="daterange">
       <el-date-picker v-model="formModel.daterange" type="daterange" value-format="YYYY-MM-DD"></el-date-picker>
     </el-form-item>
 
-    <el-form-item label="tags">
+    <el-form-item label="tags" prop="tag">
       <InputTag v-model="formModel.tag"></InputTag>
     </el-form-item>
 

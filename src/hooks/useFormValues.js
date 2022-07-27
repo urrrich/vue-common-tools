@@ -31,14 +31,15 @@ const undecstArray = (rule, data, key, target) => {
   }
 }
 
-export function useModelToValues({
-  data,
-  keyMaps,
-  deleteInvalid = true,
-  toValues = (value) => value,
-  toModel = (data, model) => {}
-}) {
-  const formModel = ref(data())
+export const useFormValues = (formModel, option) => {
+
+  const {
+    keyMaps = {},
+    deleteInvalid = true,
+    toValues = (value) => value,
+    toModel = (data, model) => {}
+  } = option || {}
+
   const values = computed({
     get() {
       let target = {}
@@ -76,13 +77,7 @@ export function useModelToValues({
     }
   })
 
-  const reset = () => {
-    formModel.value = data()
-  }
-
   return {
-    reset,
-    formModel,
     values
   }
 }

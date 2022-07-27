@@ -1,2 +1,2 @@
-export * from './hooks/useModelToValues'
+export * from './hooks/useFormValues'
 export { default as InputTag } from './components/InputTag/index.vue'
