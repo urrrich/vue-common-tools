@@ -1,6 +1,7 @@
 <script setup>
-  import { ref, getCurrentInstance } from 'vue'
-  import { useFormValues, InputTag, renderComponent } from '../src'
+  import { ref } from 'vue'
+  import { useFormValues, InputTag } from '../src'
+  import useMyAlert from './useMyAlert'
 
 
   const $form = ref()
@@ -57,24 +58,7 @@
     }
   }
 
-  let myAlert
-  const instance = getCurrentInstance()
-
-  const showAlert = async () => {
-    if(!myAlert) {
-      myAlert = renderComponent({
-        component: (await import('./MyAlert.vue')).default,
-        attrs: {
-
-        },
-        instance
-      })
-    }
-    myAlert.setProps({
-      title: '系统提示',
-      message: '这是一条系统消息' + Date.now()
-    }).show()
-  }
+  const { showAlert } = useMyAlert()
 
 </script>
 
@@ -108,7 +92,7 @@
         <el-button type="primary" @click="reset">重置model</el-button>
         <el-button type="primary" @click="updateFormModel">手动更新model</el-button>
         <el-button type="primary" @click="getValuesFromServer">从服务器获取value</el-button>
-        <el-button @click="showAlert">showAlert</el-button>
+        <el-button @click="showAlert('系统提示', '这是一条系统消息' + Date.now())">showAlert</el-button>
       </div>
       <div style="margin-right: 20px;">
         <h2>model:</h2>

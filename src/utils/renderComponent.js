@@ -19,7 +19,11 @@ export const renderComponent = ({ component, el, instance, attrs }) => {
     },
     setProps: (props) => {
       Object.entries(props).forEach(([key, value]) => {
-        vnode.component.props[key] = value
+        if (/^on/.test(key)) {
+          vnode.props[key] = value
+        } else {
+          vnode.component.props[key] = value
+        }
       })
       return _this
     },
