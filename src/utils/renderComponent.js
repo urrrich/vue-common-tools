@@ -1,15 +1,18 @@
 import { createVNode, render } from 'vue'
 
 
-export const renderComponent = ({ component, el, instance, attrs }) => {
+export const renderComponent = ({ component, el, app, attrs }) => {
   if (!el) {
     el = document.createElement('div')
     document.body.appendChild(el)
   }
   const vnode = createVNode(component, attrs)
-  vnode.appContext = {
-    ...instance?.appContext,
-    provides: instance?.provides
+  const context = app?.appContext || app?._context
+  if(context) {
+    if(app?.provides) {
+      context.provides = app.provides
+    }
+    vnode.appContext = context
   }
   render(vnode, el)
 

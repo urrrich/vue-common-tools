@@ -1,11 +1,13 @@
 <template>
+<teleport to="body">
   <div class="alert" v-if="visible">
-    <span class="close" @click="visible=false">X</span>
+    <a class="close" @click.prevent="visible=false" href="#">X</a>
     <div class="title">{{title}}</div>
     <div class="message">
       {{message}}
     </div>
   </div>
+</teleport>
 </template>
 
 <script setup>
