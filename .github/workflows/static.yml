@@ -36,7 +36,6 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
-          port: ${{ secrets.PORT }}
           key: ${{ secrets.KEY }}
           source: "vite.config.js"
           target: ~/wowchat-frontend/
